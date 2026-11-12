@@ -1,0 +1,18 @@
+# /etc/systemd/system/bitable-worker.service
+# 改好路径后: systemctl daemon-reload && systemctl enable --now bitable-worker
+[Unit]
+Description=bitable-worker
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+WorkingDirectory=/opt/bitable-worker
+EnvironmentFile=/opt/bitable-worker/.env
+ExecStart=/usr/bin/python3 -m bitable_worker -c /opt/bitable-worker/config.json run
+Restart=always
+RestartSec=5
+StandardOutput=append:/var/log/bitable-worker.log
+StandardError=append:/var/log/bitable-worker.log
+
+[Install]
+WantedBy=multi-user.target

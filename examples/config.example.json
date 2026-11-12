@@ -1,0 +1,24 @@
+{
+  "env_file": ".env",
+  "handlers": {
+    "default": {"type": "python", "target": "examples.handler_docx_text:handle"}
+  },
+  "tables": [
+    {
+      "label": "文档转文本",
+      "app_token": "把多维表格链接里 /base/ 后面那一段填在这里",
+      "table_id": "tblxxxxxxxxxxxxxx",
+      "handler": "default",
+      "trigger": "option",
+      "accept": [".docx"],
+      "fields": {
+        "input": "文件",
+        "option": "输出内容",
+        "status": "处理状态",
+        "output": "处理结果",
+        "note": "处理说明"
+      },
+      "options": {"仅正文": "text", "正文+字数统计": "stats"}
+    }
+  ]
+}

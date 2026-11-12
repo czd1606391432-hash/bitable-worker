@@ -1,0 +1,63 @@
+{
+  "env_file": ".env",
+  "poll_seconds": 20,
+  "limits": {"files_per_row": 5, "file_mb": 20, "per_day": 2000, "per_table_per_round": 3},
+
+  "handlers": {
+    "default": {
+      "type": "http",
+      "url": "http://127.0.0.1:8080/convert",
+      "timeout": 300,
+      "headers": {"Authorization": "Bearer ${MY_BACKEND_TOKEN}"},
+      "form": {"lang": "zh"},
+      "unzip": true
+    }
+  },
+
+  "tables": [
+    {
+      "label": "母版",
+      "app_token": "母版的 app_token",
+      "table_id": "tblxxxxxxxxxxxxxx",
+      "handler": "default",
+      "trigger": "option",
+      "accept": [".pdf", ".docx"],
+      "fields": {"input": "附件", "option": "版本", "status": "处理状态", "output": "处理结果", "note": "处理说明", "done_at": "完成时间"},
+      "options": {"标准版": "standard", "精简版": "lite"}
+    }
+  ],
+
+  "master": {"app_token": "母版的 app_token", "link_share": "closed", "keep_rows": false, "time_zone": "Asia/Shanghai"},
+
+  "ledger": {
+    "source_table": "项目汇总",
+    "every_seconds": 300,
+    "columns": [
+      {"name": "项目名称", "source": "项目名称", "kind": "text"},
+      {"name": "项目状态", "source": "项目状态", "kind": "select", "options": ["未启动", "进行中", "已结项"]},
+      {"name": "项目负责人", "source": "项目负责人", "kind": "user"},
+      {"name": "目标人数", "source": "目标人数", "kind": "num"},
+      {"name": "完成率", "source": "完成率", "kind": "percent"},
+      {"name": "截止日期", "source": "截止日期", "kind": "date"}
+    ]
+  },
+
+  "rules": [
+    {
+      "name": "待筛选超过7天自动淘汰",
+      "enabled": true,
+      "tables": ["master", "distributed"],
+      "table": "候选人",
+      "when": {"field": "当前环节", "is": "待筛选"},
+      "date_field": "推荐日期",
+      "older_than_days": 7,
+      "set": {"当前环节": "淘汰"},
+      "set_if_empty": {"淘汰原因": "超过7天未进入面试，系统自动淘汰"},
+      "every_seconds": 300
+    }
+  ],
+
+  "labels": {
+    "status": {"wait": "待处理", "run": "处理中", "ok": "已完成", "fail": "失败"}
+  }
+}

@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bitable-worker"
+version = "0.1.0"
+description = "把飞书多维表格当任务入口:传文件 → 自动处理 → 结果写回;带母版分发、总账汇总和超期规则。纯标准库。"
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+keywords = ["feishu", "lark", "bitable", "automation"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.scripts]
+bitable-worker = "bitable_worker.cli:main"
+
+[tool.setuptools]
+packages = ["bitable_worker"]
+
+[project.urls]
+Homepage = "https://github.com/czd1606391432-hash/bitable-worker"

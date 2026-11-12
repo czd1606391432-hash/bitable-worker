@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.egg-info/
+build/
+dist/
+.DS_Store
+
+# 本地配置和凭证,不要提交
+config.json
+*.state.json
+*.state.json.tmp
+.env
